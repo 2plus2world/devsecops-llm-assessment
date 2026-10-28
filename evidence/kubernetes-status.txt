@@ -1,0 +1,17 @@
+﻿NAME                              READY   STATUS    RESTARTS   AGE     IP            NODE                          NOMINATED NODE   READINESS GATES
+pod/api-gateway-9b499d48b-p78vh   1/1     Running   0          7h43m   10.244.0.9    devsecops-llm-control-plane   <none>           <none>
+pod/assistant-d6c4588b7-flnwz     1/1     Running   0          7h43m   10.244.0.10   devsecops-llm-control-plane   <none>           <none>
+pod/catalog-5d4cd779c4-gmm8v      1/1     Running   0          7h42m   10.244.0.11   devsecops-llm-control-plane   <none>           <none>
+pod/llm-7d5fbb6b8-xrjcl           1/1     Running   0          7h42m   10.244.0.12   devsecops-llm-control-plane   <none>           <none>
+
+NAME                          READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS    IMAGES                  SELECTOR
+deployment.apps/api-gateway   1/1     1            1           16h   api-gateway   api-gateway:1.0         app=api-gateway
+deployment.apps/assistant     1/1     1            1           16h   assistant     assistant-service:1.0   app=assistant
+deployment.apps/catalog       1/1     1            1           16h   catalog       catalog-service:1.0     app=catalog
+deployment.apps/llm           1/1     1            1           16h   ollama        ollama/ollama:latest    app=llm
+
+NAME                        TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+service/api-gateway         NodePort    10.96.103.177   <none>        8000:30080/TCP   16h   app=api-gateway
+service/assistant-service   ClusterIP   10.96.102.149   <none>        8000/TCP         16h   app=assistant
+service/catalog-service     ClusterIP   10.96.58.50     <none>        8000/TCP         16h   app=catalog
+service/llm                 ClusterIP   10.96.40.220    <none>        11434/TCP        16h   app=llm

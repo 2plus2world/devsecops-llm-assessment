@@ -1,0 +1,17 @@
+offline-bundle/
+venv/
+.venv/
+__pycache__/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.bak
+final-review.zip
+offline-bundle/
+.env
+.env.*
+!.env.example
+*.pem
+*.key

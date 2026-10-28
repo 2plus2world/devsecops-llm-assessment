@@ -1,0 +1,26 @@
+param(
+  [string[]]$Images = @(
+    "devsecops-llm-api-gateway:latest",
+    "devsecops-llm-assistant:latest",
+    "devsecops-llm-catalog:latest",
+    "ollama/ollama:latest"
+  )
+)
+$ErrorActionPreference = "Stop"
+if (-not (Get-Command docker -ErrorAction SilentlyContinue)) {
+  throw "Docker CLI not found."
+}
+New-Item -ItemType Directory -Force -Path reports,offline-bundle | Out-Null
+foreach ($image in $Images) {
+  docker image inspect $image *> $null
+  if ($LASTEXITCODE -ne 0) {
+    Write-Warning "Image not found locally; skipping: $image"
+    continue
+  }
+  $safe = $image -replace '[:/]', '-'
+  docker image save -o "offline-bundle\$safe.tar" $image
+  if ($LASTEXITCODE -ne 0) { throw "Failed to export image: $image" }
+  Get-FileHash "offline-bundle\$safe.tar" -Algorithm SHA256 |
+    Format-List | Out-File "offline-bundle\$safe.sha256.txt"
+}
+Write-Host "Image export finished. Confirm every required image was found."

@@ -1,0 +1,25 @@
+name: source-checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  basic-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check required project files
+        shell: bash
+        run: |
+          test -f README.md
+          test -f AI_USAGE.md
+          test -f docs/RUNBOOK.md
+          test -f docs/THREAT_MODEL.md
+          test -f k8s/app.yaml
+          test -f k8s/llm.yaml
+          test -f k8s/jobs/llm-model-verification-cronjob.yaml
+      - name: YAML parse and Kubernetes schema validation
+        run: |
+          python -m pip install --quiet yamllint
+          yamllint -d relaxed k8s/

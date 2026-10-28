@@ -1,0 +1,20 @@
+groups:
+  - name: devsecops-llm-alerts
+    rules:
+      - alert: KubernetesPodNotReady
+        expr: kube_pod_status_ready{namespace="devsecops-llm",condition="true"} == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Application pod is not ready"
+          description: "A pod in devsecops-llm has not been ready for 5 minutes."
+
+      - alert: KubernetesContainerRestarts
+        expr: increase(kube_pod_container_status_restarts_total{namespace="devsecops-llm"}[15m]) > 2
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container restart count is high"
+          description: "A container restarted more than twice in 15 minutes."
